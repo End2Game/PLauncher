@@ -1,0 +1,24 @@
+[package]
+name = "plauncher"
+version = "1.7.0"
+edition = "2021"
+description = "PLauncher - Minecraft launcher written in Rust"
+license = "MIT"
+
+[dependencies]
+eframe = { version = "0.29", default-features = false, features = ["default_fonts", "glow", "persistence"] }
+egui = "0.29"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "process", "time", "fs", "io-util", "sync"] }
+reqwest = { version = "0.12", features = ["json", "rustls-tls", "blocking"] }
+anyhow = "1"
+thiserror = "2"
+chrono = { version = "0.4", features = ["serde"] }
+sysinfo = "0.32"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+walkdir = "2"
+directories = "5"
+sha1 = "0.10"
+sha2 = "0.10"
+md5 = "0.7"
