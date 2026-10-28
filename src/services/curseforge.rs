@@ -1,4 +1,4 @@
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result};
 use serde::Deserialize;
 use sha1::Digest;
 use std::{fs, path::{Path, PathBuf}, time::Duration};

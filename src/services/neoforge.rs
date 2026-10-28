@@ -23,7 +23,7 @@ pub fn get_promotions() -> Result<Promotions> {
 }
 
 /// Builds the official installer artifact URL for a Minecraft/NeoForge version pair.
-pub fn installer_url(minecraft_version: &str, neoforge_version: &str) -> String {
+pub fn installer_url(_minecraft_version: &str, neoforge_version: &str) -> String {
     let artifact_version = neoforge_version.to_string();
     format!("https://maven.neoforged.net/releases/net/neoforged/neoforge/{artifact_version}/neoforge-{artifact_version}-installer.jar")
 }

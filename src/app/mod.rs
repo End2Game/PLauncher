@@ -186,7 +186,6 @@ impl PLauncherApp {
             if ui.button("Знайти моди").clicked() {
                 self.mod_offset = 0;
                 self.mod_total_hits = 0;
-                self.status = "Пошук у Modrinth…".into();
                 match modrinth::search_mods(&self.mod_query, &instance.minecraft_version, &self.mod_loader, 0) {
                     Ok(r) => { self.mod_hits = r.hits; self.mod_total_hits = r.total_hits as usize; self.selected_mod = None; self.status = format!("Знайдено: {} результатів із {}", self.mod_hits.len(), self.mod_total_hits); }
                     Err(e) => self.status = format!("Помилка Modrinth: {e}")

@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use std::{path::PathBuf, sync::Arc};
-use tokio::{sync::{mpsc, Mutex}, task::JoinHandle};
+use tokio::sync::{mpsc, Mutex};
 
 #[derive(Debug, Clone)]
 pub struct DownloadTask {

@@ -1,5 +1,6 @@
 use anyhow::{bail, Context, Result};
 use serde::Deserialize;
+use sha1::Digest;
 use std::{fs, path::{Component, Path, PathBuf}, time::Duration};
 
 #[derive(Debug, Clone, Deserialize)]
@@ -103,7 +104,6 @@ fn safe_path(value: &str) -> Result<PathBuf> {
     Ok(p.to_path_buf())
 }
 fn hash_file(path: &Path, expected: &str) -> Result<bool> {
-    use sha1::Digest;
     let bytes = fs::read(path)?;
     Ok(format!("{:x}", sha1::Sha1::digest(bytes)).eq_ignore_ascii_case(expected))
 }

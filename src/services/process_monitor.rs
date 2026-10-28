@@ -1,4 +1,4 @@
-use sysinfo::{Pid, ProcessesToUpdate, System};
+use sysinfo::{ProcessesToUpdate, System};
 
 #[derive(Debug, Clone)]
 pub struct MinecraftProcess {
