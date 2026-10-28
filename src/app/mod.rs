@@ -176,7 +176,7 @@ impl PLauncherApp {
         ui.label(format!("Інстанс: {} · Minecraft {}", instance.name, instance.minecraft_version));
         ui.horizontal(|ui| {
             ui.label("Завантажувач:");
-            egui::ComboBox::from_id_source("mod_loader").selected_text(&self.mod_loader).show_ui(ui, |ui| {
+            egui::ComboBox::from_id_salt("mod_loader").selected_text(&self.mod_loader).show_ui(ui, |ui| {
                 for loader in ["fabric", "forge", "neoforge", "quilt"] { ui.selectable_value(&mut self.mod_loader, loader.to_string(), loader); }
             });
         });
@@ -188,7 +188,7 @@ impl PLauncherApp {
                 self.mod_total_hits = 0;
                 self.status = "Пошук у Modrinth…".into();
                 match modrinth::search_mods(&self.mod_query, &instance.minecraft_version, &self.mod_loader, 0) {
-                    Ok(r) => { self.mod_hits = r.hits; self.mod_total_hits = r.total_hits; self.selected_mod = None; self.status = format!("Знайдено: {} результатів із {}", self.mod_hits.len(), self.mod_total_hits); }
+                    Ok(r) => { self.mod_hits = r.hits; self.mod_total_hits = r.total_hits as usize; self.selected_mod = None; self.status = format!("Знайдено: {} результатів із {}", self.mod_hits.len(), self.mod_total_hits); }
                     Err(e) => self.status = format!("Помилка Modrinth: {e}")
                 }
             }
@@ -196,8 +196,8 @@ impl PLauncherApp {
         ui.horizontal(|ui| {
             if ui.add_enabled(self.mod_offset > 0, egui::Button::new("← Попередня")).clicked() {
                 self.mod_offset = self.mod_offset.saturating_sub(20);
-                match modrinth::search_mods(&self.mod_query, &instance.minecraft_version, &self.mod_loader, self.mod_offset) {
-                    Ok(r) => { self.mod_hits = r.hits; self.mod_total_hits = r.total_hits; self.selected_mod = None; self.status = format!("Сторінка завантажена · {} результатів", self.mod_total_hits); }
+                match modrinth::search_mods(&self.mod_query, &instance.minecraft_version, &self.mod_loader, self.mod_offset as u32) {
+                    Ok(r) => { self.mod_hits = r.hits; self.mod_total_hits = r.total_hits as usize; self.selected_mod = None; self.status = format!("Сторінка завантажена · {} результатів", self.mod_total_hits); }
                     Err(e) => self.status = format!("Помилка Modrinth: {e}")
                 }
             }
@@ -205,8 +205,8 @@ impl PLauncherApp {
                 (self.mod_offset + self.mod_hits.len()).min(self.mod_total_hits), self.mod_total_hits));
             if ui.add_enabled(self.mod_offset + 20 < self.mod_total_hits, egui::Button::new("Наступна →")).clicked() {
                 self.mod_offset += 20;
-                match modrinth::search_mods(&self.mod_query, &instance.minecraft_version, &self.mod_loader, self.mod_offset) {
-                    Ok(r) => { self.mod_hits = r.hits; self.mod_total_hits = r.total_hits; self.selected_mod = None; self.status = format!("Сторінка завантажена · {} результатів", self.mod_total_hits); }
+                match modrinth::search_mods(&self.mod_query, &instance.minecraft_version, &self.mod_loader, self.mod_offset as u32) {
+                    Ok(r) => { self.mod_hits = r.hits; self.mod_total_hits = r.total_hits as usize; self.selected_mod = None; self.status = format!("Сторінка завантажена · {} результатів", self.mod_total_hits); }
                     Err(e) => self.status = format!("Помилка Modrinth: {e}")
                 }
             }
@@ -341,6 +341,7 @@ impl eframe::App for PLauncherApp {
                 if ui.button("Зберегти Client ID").clicked() {
                     let settings = crate::services::settings::AppSettings {
                         oauth_client_id: self.oauth_client_id.trim().to_string(),
+                        ..Default::default()
                     };
                     self.status = match crate::services::settings::save(&settings) {
                         Ok(()) => "Client ID збережено в налаштуваннях".into(),

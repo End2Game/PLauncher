@@ -32,7 +32,7 @@ pub fn restore_world(archive_path: &Path, destination: &Path) -> Result<usize> {
     let mut restored = 0usize;
     for i in 0..archive.len() {
         let mut item = archive.by_index(i)?;
-        let Some(enclosed) = item.enclosed_name().map(Path::to_path_buf) else {
+        let Some(enclosed) = item.enclosed_name() else {
             bail!("Архів містить небезпечний шлях");
         };
         if enclosed.components().any(|c| matches!(c, Component::ParentDir | Component::RootDir | Component::Prefix(_))) {
